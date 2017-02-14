@@ -75,6 +75,8 @@ WSGI_APPLICATION = 'EBDemo.wsgi.application'
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 if 'RDS_HOSTNAME' in os.environ:
+    raise RuntimeError("Name: {}, USER: {}, Password: {}, Host: {}, Port: {}".format(os.environ['RDS_DB_NAME'],
+        os.environ['RDS_USERNAME'],os.environ['RDS_PASSWORD'],os.environ['RDS_HOSTNAME'],os.environ['RDS_PORT']))
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
