@@ -11,6 +11,7 @@ def index(request):
 	out = [str(e) for e in sequenceList]
 	context = {
 		'out': out,
+		'server' : request.get_host(),
 	}
 	return render(request, 'fibseq/index.html', context)
 
