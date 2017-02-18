@@ -1,4 +1,5 @@
 from django.shortcuts import render
+import socket
 
 # Create your views here.
 from .models import Element
@@ -11,17 +12,10 @@ def index(request):
 	out = [str(e) for e in sequenceList]
 	context = {
 		'out': out,
-		'server' : get_client_ip(request),
+		'server' : socket.gethostname(),
 	}
 	return render(request, 'fibseq/index.html', context)
 
-def get_client_ip(request):
-	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-	if x_forwarded_for:
-		ip = x_forwarded_for.split(',')[0]
-	else:
-		ip = request.META.get('REMOTE_ADDR')
-	return ip
 #shows the list of elements up to that point
 def sequence(request, p):
 	pos = int(p)
