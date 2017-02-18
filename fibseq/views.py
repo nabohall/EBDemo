@@ -11,10 +11,17 @@ def index(request):
 	out = [str(e) for e in sequenceList]
 	context = {
 		'out': out,
-		'server' : request.get_host(),
+		'server' : get_client_ip(request),
 	}
 	return render(request, 'fibseq/index.html', context)
 
+def get_client_ip(request):
+	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+	if x_forwarded_for:
+		ip = x_forwarded_for.split(',')[0]
+	else:
+		ip = request.META.get('REMOTE_ADDR')
+	return ip
 #shows the list of elements up to that point
 def sequence(request, p):
 	pos = int(p)
