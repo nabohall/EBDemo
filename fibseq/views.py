@@ -12,7 +12,7 @@ def index(request):
 	out = [str(e) for e in sequenceList]
 	context = {
 		'out': out,
-		'server' : socket.gethostname(),
+		#'server' : socket.gethostname(),
 	}
 	return render(request, 'fibseq/index.html', context)
 
@@ -38,12 +38,18 @@ def generate(request):
 	except (Element.DoesNotExist, IndexError):
 		#generate elements until point
 		pos = int(request.POST['generate'])
-		last, secondToLast = Element.objects.all().order_by('-position')[:2]
-		a, b = secondToLast.value, last.value
-		for i in range(last.position, pos):
-			a, b = b, a+b
-			ele = Element(value=b, position=(i+1))
-			ele.save()
+		try:
+			last, secondToLast = Element.objects.all().order_by('-position')[:2]
+		except ValueError:
+			Element(value=1, position=1).save()
+			Element(value=1, position=2).save()
+		finally:
+			last, secondToLast = Element.objects.all().order_by('-position')[:2]
+			a, b = secondToLast.value, last.value
+			for i in range(last.position, pos):
+				a, b = b, a+b
+				ele = Element(value=b, position=(i+1))
+				ele.save()
 	finally:
 		#redirect to sequence, which will display the sequence
 		p = chr(int(request.POST['generate']))
