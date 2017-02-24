@@ -5,18 +5,21 @@ import socket
 from .models import Element
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-
-#Print every element in the database
+"""
+Print every element in the database
+"""
 def index(request):
 	sequenceList = Element.objects.all()
-	out = [str(e) for e in sequenceList]
+	out = list(map(str, sequenceList))
 	context = {
 		'out': out,
-		#'server' : socket.gethostname(),
+		'server' : socket.gethostname(),
 	}
 	return render(request, 'fibseq/index.html', context)
 
-#shows the list of elements up to that point
+"""
+shows the list of elements up to that point
+"""
 def sequence(request, p):
 	pos = int(p)
 	seq = Element.objects.all()[:pos]
